@@ -11,15 +11,19 @@ export default function Login({ onLogin }) {
     event.preventDefault();
     setError('');
     setLoading(true);
-    try {
-      const data = await api.login(password);
-      sessionStorage.setItem('mimi-token', data.token);
-      onLogin(data.user);
-    } catch (err) {
-      setError(err.message);
-    } finally {
+    
+    // Verificación directa en el código de la web (sin usar backend para entrar)
+    const passwordOk = password.trim().toLowerCase() === 'tulipanes';
+    
+    setTimeout(() => { // Pequeña pausa para el efecto de carga
+      if (passwordOk) {
+        sessionStorage.setItem('mimi-token', 'local-token-seguro');
+        onLogin({ name: 'Evelin' });
+      } else {
+        setError('Esa no es la palabra correcta, intenta de nuevo.');
+      }
       setLoading(false);
-    }
+    }, 800);
   }
 
   return (
